@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', function(event) {
     event.preventDefault();
+
     validateEmail();
 
     const selectedCountry = countryInput.value;
@@ -58,16 +59,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (selectedCountry === "") {
       alert("Please select a country.");
-      return;
+      return
     } else {
       alert('country is valid!')
     }
 
     if (!validatePostalCode(selectedCountry, postalCode)) {
       alert("Please enter a valid postal code for the selected country.");
-      return;
+      return
     } else{
       alert('postal code is valid!')
+    }
+
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    if (password.length < 8) {
+      alert("Password must be at least 8 characters long.");
+      return
+    }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return
+    } else {
+      alert("Password is valid!");
     }
   });
 });
