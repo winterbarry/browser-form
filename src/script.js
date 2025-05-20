@@ -28,6 +28,24 @@ function validateEmail() {
   }
 }
 
+function validatePostalCode(country, postalCode) {
+  const postalCodePatterns = {
+    US: /^\d{5}(-\d{4})?$/,                         
+    CA: /^[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d$/,        
+    GB: /^[A-Za-z]{1,2}\d[A-Za-z\d]?\s*\d[A-Za-z]{2}$/i, 
+    AU: /^\d{4}$/,                                   
+    CN: /^\d{6}$/,                                   
+    IN: /^\d{6}$/,                                 
+    JP: /^\d{3}-\d{4}$/                        
+  };
+
+  const pattern = postalCodePatterns[country]; // retrieve pattern for selected country
+  if (!pattern) return true; // if pattern not defined for selected country, skip validation
+
+  return pattern.test(postalCode.trim());
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('form');
 
@@ -35,9 +53,21 @@ document.addEventListener('DOMContentLoaded', () => {
     event.preventDefault();
     validateEmail();
 
-    if (countryInput.value === "") {
+    const selectedCountry = countryInput.value;
+    const postalCode = postalInput.value;
+
+    if (selectedCountry === "") {
       alert("Please select a country.");
-      return; 
+      return;
+    } else {
+      alert('country is valid!')
+    }
+
+    if (!validatePostalCode(selectedCountry, postalCode)) {
+      alert("Please enter a valid postal code for the selected country.");
+      return;
+    } else{
+      alert('postal code is valid!')
     }
   });
 });
