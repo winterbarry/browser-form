@@ -1,6 +1,7 @@
+import validate from 'validate.js';
 import FormValidation from '@form-validation/core';
 import PluginPure from '@form-validation/plugin-pure';
-import validate from 'validate.js';
+import { zipCode } from '@form-validation/validator-zip-code';
 
 const emailInput = document.getElementById('email');
 const countryInput = document.getElementById('country');
@@ -33,5 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', function(event) {
     event.preventDefault();
     validateEmail();
+
+    if (countryInput.value === "") {
+      alert("Please select a country.");
+      return; 
+    }
   });
 });
