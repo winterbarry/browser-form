@@ -6,25 +6,38 @@ const postalInput = document.getElementById('postal');
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirm-password');
 
+function markInvalid(inputElement, message) {
+  inputElement.style.border = '2px solid red';
+  inputElement.value = '';
+  inputElement.placeholder = message;
+}
+
+function clearInvalid(inputElement) {
+  inputElement.style.border = '';
+  inputElement.placeholder = '';
+}
+
 function validateEmail() {
+  clearInvalid(emailInput);
+
   const constraints = {
     email: {
       presence: { allowEmpty: false, message: "is required" },
-      email: {
-        message: "is not a valid email address"
-      }
+      email: { message: "is not a valid email address" }
     }
   };
 
   const result = validate({ email: emailInput.value }, constraints);
 
   if (result) {
-    alert(result.email[0]);
+    markInvalid(emailInput, result.email[0]);
     return false;
   }
+
   return true;
 }
 
+// defining postal code patterns
 function validatePostalCode(country, postalCode) {
   const postalCodePatterns = {
     US: /^\d{5}(-\d{4})?$/,
@@ -43,45 +56,55 @@ function validatePostalCode(country, postalCode) {
 }
 
 function validateCountry() {
+  clearInvalid(countryInput);
+
   if (countryInput.value === "") {
-    alert("Please select a country.");
+    markInvalid(countryInput, "Country is required");
     return false;
   }
+
   return true;
 }
 
+// validating postal code patterns
 function validatePostal() {
+  clearInvalid(postalInput);
+
   const selectedCountry = countryInput.value;
   const postalCode = postalInput.value;
 
   if (!validatePostalCode(selectedCountry, postalCode)) {
-    alert("Please enter a valid postal code for the selected country.");
+    markInvalid(postalInput, "Invalid postal code");
     return false;
   }
+
   return true;
 }
 
 function validatePasswords() {
+  clearInvalid(passwordInput);
+  clearInvalid(confirmPasswordInput);
+
   const password = passwordInput.value;
   const confirmPassword = confirmPasswordInput.value;
 
   if (password === '') {
-    alert("Password field is required.");
+    markInvalid(passwordInput, "Password is required");
     return false;
   }
 
   if (confirmPassword === '') {
-    alert("Confirm Password field is required.");
+    markInvalid(confirmPasswordInput, "Confirm Password is required");
     return false;
   }
 
   if (password.length < 8) {
-    alert("Password must be at least 8 characters long.");
+    markInvalid(passwordInput, "Minimum 8 characters");
     return false;
   }
 
   if (password !== confirmPassword) {
-    alert("Passwords do not match.");
+    markInvalid(confirmPasswordInput, "Passwords do not match");
     return false;
   }
 
